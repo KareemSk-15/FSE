@@ -1,0 +1,28 @@
+Space Invaders (sample proposal) 
+Overview: 
+It's a shooting game where you shoot as many moving alien ships as possible to collect as many points as you can without dying (You have 3 hearts in level 1 and 5 in level 2). The game will have 1 normal stage and 1 boss stage.  
+Objective: Complete the first level and beat the boss in the second level to complete the game. 
+ 
+
+ 
+Normal aliens (enemies) (will be of varying colours)	- 	If they pass the barrier, game over (you lose all 3 hearts)
+-	Can shoot back at the spaceship. 
+(player) 
+-	Aliens towards the back are worth more points. 
+Will move left and right and slowly move cl
+Shields Walls	- 	Protect the player from the alien’s projectiles. 
+-	Can take 7 Shots. 
+-	Move Left to right.
+-	There are 3.
+	- 	It can be damaged by both the player and the aliens 
+Boss Spaceship	- 	Will need to be shot multiple times to be defeated 
+	- 	Shoots larger bullets at the player.
+-	The bullets do 2 hearts' worth of damage.
+-	Has 5 smaller ships protecting it
+Bullets 	- 	Press space to shoot them 
+	- 	Can be shot every X (will be determined) seconds 
+	- 	Multiple will be needed to kill the boss alien (will be determined)
+	- 	They disappear once they hit an alien (They one-shot the small ships
+Alien Bullets 	- 	Can kill the player with 3 shots in level 1 and 5 shots in level 2 
+	- 	Are shot randomly but not too frequently  
+ 
