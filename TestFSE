@@ -1,0 +1,398 @@
+int gameMode=0;//0 - menu, 1 - play game, 2 - instructions, 3 - themes
+int level=1;
+int a;
+int hitCount=0;
+int heartNumber=3;
+int rx=550;
+float[]ey1={80, 80, 80, 80, 80, 80, 80, 120, 120, 120, 120, 120, 120, 120, 160, 160, 160, 160, 160, 160, 160};
+float[]enemyX={150, 350, 250, 450, 650, 550, 750, 150, 250, 350, 450, 550, 650, 750, 150, 250, 350, 450, 550, 650, 750};
+float[] enemYbullet={132, 132, 132, 132, 132, 132, 132, 172, 172, 172, 172, 172, 172, 172, 212, 212, 212, 212, 212, 212, 212};
+//float[]enemXbullet={150, 350, 250, 450, 650, 550, 750, 150, 250, 350, 450, 550, 650, 750, 150, 250, 350, 450, 550, 650, 750};
+float[]ey={80, 80, 80, 80, 80, 80, 80, 120, 120, 120, 120, 120, 120, 120, 160, 160, 160, 160, 160, 160, 160};
+float[] bulletX = {50};
+float[] bulletY = {50};
+
+float[] shieldHitBox={100, 300, 500, 700, 900, 1100};
+float[] damagedShieldHB={100, 300, 500, 700, 900, 1100};
+int bulletCount = 0;
+float bSX;
+float bSY;
+boolean firing = false;
+boolean ebullet=false;
+int rdec=int(random(0, 10));
+color red=color(255, 0, 0);
+color green=color(0, 255, 0);
+color blue=color(0, 0, 255);
+PImage lobby;
+PImage bHeart;
+PImage dShield;
+PImage rship;
+PImage star;
+PImage back;
+PImage GameOver;
+PImage GBack;
+PImage GGameOver;
+PImage GLobby;
+PImage GSS;
+PImage GYW;
+PImage CBack;
+PImage CGOver;
+PImage CLobby;
+PImage CBSS;
+PImage CBYW;
+PImage BGP;
+PImage Lvl1;
+PImage eShip;
+PImage Heart;
+PImage lvl2;
+PImage Shield;
+void setup() {
+  size(1200, 670);
+  textSize(30);
+  rship=loadImage("Ship1.png");
+  bHeart=loadImage("BlueHeart.png");
+  Shield=loadImage("Shield.png");
+  lobby=loadImage("Lobby.png");
+  GameOver=loadImage("GameOver.jpg");
+  star=loadImage("star background.jpg");
+  back=loadImage("Back.png");
+  GBack=loadImage("GBack.png");
+  lvl2=loadImage("lvl2.png");
+  GGameOver=loadImage("GGameOver.png");
+  GLobby=loadImage("GLobby.png");
+  dShield=loadImage("DamagedShield.png");
+  GSS=loadImage("GSS.png");
+  GYW=loadImage("GYW.png");
+  CBack=loadImage("CBack.png");
+  CGOver=loadImage("CGOver.png");
+  CLobby=loadImage("CLobby.png");
+  CBSS=loadImage("CBSS.png");
+  CBYW=loadImage("CBYW.png");
+  BGP=loadImage("BGP.png");
+  Lvl1=loadImage("Level1.png");
+  eShip=loadImage("SpaceShip.png");
+  Heart=loadImage("Heart.png");
+}
+
+
+void draw() {//60 times per second (game loop)
+  if (gameMode==0) {
+    mainMenu();
+  } else if (gameMode==1) {
+    instructions();
+  } else if (gameMode==2) {
+    play();
+    hb();
+  } else if (gameMode==3) {
+    themes();
+  } else if (gameMode==4) {
+    gameOver();
+    image(GameOver, 0, 0, 1200, 670);
+  }
+}
+void keyPressed() {
+  if (keyCode==RIGHT&& rx<1100) {
+    rx+=10;
+  } else if (keyCode==LEFT && rx>0) {
+    rx-=10;
+  }
+}
+
+void keyReleased() {
+  if (key == ' ' && bulletCount < bulletX.length) {
+    bulletX[bulletCount] = rx + 50;
+    bulletY[bulletCount] = 560;
+    bulletCount++;
+    firing = true;
+  }
+}
+
+
+void eShips() {
+  for (int i=0; i<enemyX.length; i++) {
+    image(eShip, enemyX[i], ey[i], 50, 50);
+    noFill();
+    stroke(red);
+    strokeWeight(2);
+    //rect(enemyX[i], ey[i], 50, 50);
+
+
+
+    if ((enemyX[0]<-8000)&&(enemyX[1]<-8000)&&(enemyX[2]<-8000)&&(enemyX[3]<-8000)&&(enemyX[4]<-8000)&&(enemyX[5]<-8000)&&(enemyX[6]<-8000)&&(enemyX[7]<-8000)&&(enemyX[8]<-8000)&&(enemyX[9]<-8000)&&(enemyX[10]<-8000)&&(enemyX[11]<-8000)&&(enemyX[12]<-8000)&&(enemyX[13]<-8000)&&(enemyX[14]<-8000)&&(enemyX[15]<-8000)&&(enemyX[16]<-8000)&&(enemyX[17]<-8000)&&(enemyX[18]<-8000)&&(enemyX[19]<-8000)&&(enemyX[20]<-8000)) {
+      image(lvl2, 0, 0, 1200, 670);
+      break;
+    }
+    if (i>10) {
+      enemyX[i]+=.7;
+    } else {
+      enemyX[i]-=.7;
+    }
+    ey[i]+=1;
+    if (enemyX[i]>1150) {
+      enemyX[i]=50;
+    }
+    if (enemyX[i]<-50 &&enemyX[i]>-1000) {
+      enemyX[i]=1000;
+    }
+
+
+  }
+}
+void DamagedShield() {
+  for (int i=0; i<shieldHitBox.length; i++) {
+    noFill();
+    stroke(red);
+    strokeWeight(1);
+    //rect(damagedShieldHB[i], 470, 70, 50);
+    image(dShield, damagedShieldHB[i]-10, 457, 90, 70);
+  }
+}
+void Shields() {
+  for (int i=0; i<shieldHitBox.length; i++) {
+    noFill();
+    stroke(red);
+    strokeWeight(2);
+    //rect(shieldHitBox[i], 470, 70, 50);
+    image(Shield, shieldHitBox[i], 470, 70, 50);
+  }
+}
+
+void Shots() {
+  if (firing) {
+    for (int i= 0; i < bulletCount; i++) {
+      noFill();
+      strokeWeight(2);
+      stroke(red);
+      //rect(bulletX[i]-5, bulletY[i]-5, 12, 12);
+      strokeWeight(4);
+      stroke(255);
+      fill(blue);
+      ellipse(bulletX[i], bulletY[i], 10, 10);
+      bulletY[i] -= 25;
+
+      if (bulletY[i] < 0) {
+        for (int a = i; a < bulletCount - 1; a++) {
+          bulletX[a] = bulletX[a + 1];
+          bulletY[a] = bulletY[a + 1];
+        }
+        bulletCount--;
+      }
+    }
+  }
+}
+
+void Hearts() {
+  if (heartNumber==3) {
+    image(Heart, 1030, 30, 50, 50);
+    image(Heart, 1090, 30, 50, 50);
+    image(Heart, 1140, 30, 50, 50);
+  } else if (heartNumber==2) {
+    image(Heart, 1030, 30, 50, 50);
+    image(Heart, 1090, 30, 50, 50);
+  } else if (heartNumber==1) {
+    image(Heart, 1030, 30, 50, 50);
+  } else if (heartNumber==0) {
+    gameMode=4;
+  }
+}
+void eShots() {
+  int timeInterval = 2000;  // Time interval between each shot in milliseconds
+  for (int i = 0; i < enemYbullet.length; i++) {
+    if (millis() > (i + 1) * timeInterval) {
+      noFill();
+      strokeWeight(5);
+      stroke(red);
+      //rect(enemyX[i] - 5, enemYbullet[i] + 150, 12, 12);
+      stroke(255);
+      strokeWeight(4);
+      fill(green);
+      ellipse(enemyX[i], enemYbullet[i] + 155, 12, 12);
+      enemYbullet[i] += 5;
+      //if (i==20){
+      // i--; 
+      //}
+    }
+  }
+}
+
+
+void play() {
+  image(BGP, 0, 0, 1200, 670);
+  image(Lvl1, 50, 30, 120, 40);
+  strokeWeight(5);
+  stroke(#46FC00);
+  line(0, 450, 1200, 450);
+  image(rship, rx, 560, 100, 100);
+  noFill();
+  strokeWeight(2);
+  stroke(red);
+
+  //rect(rx, 560, 100, 100);
+  fill(green);
+  eShots();
+  Shots();
+  eShips();
+  Hearts();
+  DamagedShield();
+  Shields();
+  hits();
+}
+void gameOver() {
+  enemyX=new float[] {150, 350, 250, 450, 650, 550, 750, 150, 250, 350, 450, 550, 650, 750, 150, 250, 350, 450, 550, 650, 750};
+  ey=new float[] {80, 80, 80, 80, 80, 80, 80, 120, 120, 120, 120, 120, 120, 120, 160, 160, 160, 160, 160, 160, 160};
+  bulletX =new float[] {50};
+  bulletY =new float[] {50};
+  shieldHitBox=new float[]{100, 300, 500, 700, 900, 1100};
+  damagedShieldHB=new float[]{100, 300, 500, 700, 900, 1100};
+
+  heartNumber=3;
+  if (mousePressed) {
+    if (insideRect(420, 400, 200, 100)) {
+      gameMode=2;
+    }
+    if (insideRect(600, 400, 200, 100)) {
+      gameMode=0;
+    }
+  }
+}
+
+void instructions() {
+  textSize(40);
+  fill(#28DEA9);
+  image(star, 0, 0, 1200, 670);
+  text("Step 1: Go back to main lobby and select a theme for your game", 50, 50);
+  text("Step 2: Star the game and move your airplane dodging the ", 50, 150);
+  text("                bullets coming from the alien ships", 50, 200);
+  text("Step 3: Press space bar to shoot bullets and hit the ships", 50, 275);
+  text("Goal: eliminate all ships and then the boss ship without getting hit 3", 50, 325);
+  text("            times", 50, 375);
+  image(back, 100, 500);
+  if (mousePressed) {
+    if (insideRect(100, 550, 200, 100)) {
+      gameMode=0;
+    }
+  }
+}
+
+void hits(){
+ if (hitCount==3){
+  heartNumber--; 
+  hitCount=0;
+ }
+}
+void themes() {
+  textSize(35);
+  image(star, 0, 0, 1200, 670);
+  image(lobby, 100, 400, 400, 200);
+  image(GLobby, 700, 400, 400, 200);
+  image(CLobby, 400, 100, 400, 200);
+  text("Select theme", 50, 50);
+  image(back, 900, 5);
+  if (mousePressed) {
+    if (insideRect(900, 55, 200, 100)) {
+      gameMode=0;
+    }
+  }
+  fill(#643DAD);
+  textSize(25);
+  text("Color Blind Mode", 475, 100);
+  text("Normal Mode", 225, 400);
+  text("Ultra Mode", 850, 400);
+}
+void mainMenu() {
+  image(lobby, 0, 0, width, height);
+  if (mousePressed) {
+    if (insideRect(385, 195, 435, 40)) {
+      gameMode=1;
+    }
+    if (insideRect(500, 300, 170, 60)) {
+      gameMode=2;
+    }
+    if (insideRect(450, 420, 280, 60)) {
+      gameMode=3;
+    }
+  }
+}
+
+
+    
+
+
+
+
+void hb() {
+    for (int i = 0; i <enemyX.length; i++) {
+  if(hitBox(new int[]{int(enemyX[i]),int (ey[i]),50,50}, new int[]{0,450,1200,450})){
+      println("HITLINE");
+      heartNumber-=1;
+      for ( i=0; i<=6; i++) {
+        ey[i]=80;
+      }
+      for (i=7; i<=13; i++) {
+        ey[i]=120;
+      }
+      for (i=14; i<=20; i++) {
+        ey[i]=160;
+      }   
+  }
+    }
+  for (int i = 0; i <enemyX.length; i++) {
+    for (int a = 0; a < bulletCount; a++) {
+      if (hitBox(new int[]{int(enemyX[i]), int(ey[i]), 50, 50}, new int[]{int(bulletX[a]), int(bulletY[a]), 10, 10})) {
+        enemyX[i] -= 99999;
+        bulletY[a] = -100;
+      }
+    }
+  }
+
+  for (int i = 0; i < 20; i++) {
+    if (hitBox(new int[]{int(enemyX[i]-5), int(enemYbullet[i] + 150), 12, 12}, new int[]{int(rx), 560, 120, 120})) {
+      enemYbullet[i] = 2000;
+      print("heartNumber:" + heartNumber);
+      hitCount++;
+    }
+  }
+
+  for (int i=0; i<enemyX.length; i++) {
+    for (int b=0; b<shieldHitBox.length; b++) {
+      if ((hitBox(new int[]{int(enemyX[i]-5), int(enemYbullet[i]+150), 12, 12}, new int[]{int(damagedShieldHB[b]), 470, 70, 50}))) {
+        println("fired");
+         enemYbullet[i] = 2000;
+        if (shieldHitBox[b]<1200) {
+          shieldHitBox[b]=2000;
+        } else {
+          damagedShieldHB[b]=2000;
+        }
+      }
+    }
+  }
+  for (int a = 0; a < bulletCount; a++) {
+    for (int b = 0; b < shieldHitBox.length; b++) {
+      if (hitBox(new int[]{int(bulletX[a]), int(bulletY[a]), 12, 12}, new int[]{int(damagedShieldHB[b]), 470, 70, 50})) {
+               bulletY[a] = -100;
+        if (shieldHitBox[b]<1200) {
+          shieldHitBox[b]=2000;
+        } else {
+          damagedShieldHB[b]=2000;
+        }
+      }
+    }
+  }
+}
+
+
+
+
+boolean insideRect(int left, int top, int w, int h) {
+  return mouseX>left && mouseX<left+w && mouseY>top && mouseY<top+h;
+}
+
+boolean hitBox(int[] r1, int[] r2) {
+  int r1Bot, r1Right;
+  int r2Bot, r2Right;
+  r1Right=r1[0]+r1[2];//the "right" side of the first rectangle
+  r1Bot=r1[1]+r1[3];//the "bottom" of the first rectangle
+  r2Right=r2[0]+r2[2];//the "right" side of the second rectangle
+  r2Bot=r2[1]+r2[3];//the "bottom" of the second rectangle
+  return (r1Right > r2[0] && r1[0] < r2Right && r1Bot > r2[1] && r1[1] < r2Bot);
+}//end hitBox
